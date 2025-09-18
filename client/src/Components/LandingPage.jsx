@@ -4,31 +4,55 @@ import HeroImg from "../assets/undraw_medicine_hqqg.svg";
 import Ubi from "../assets/user-ubication.svg";
 import userNoti from "../assets/user-notification.svg";
 import mapaUbi from "../assets/mapa-ubicacion.svg";
-import LoginModal from "./Login";
+import RegisterModal from "./Register.jsx";
+import OnboardingModal from "./Onboarding.jsx";
 import { useState } from "react";
 
 const LandingPage = ({ isLoggedIn, onLogout, onNavigateHome }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
 
-  const openLoginingModal = () => {
-    setIsModalOpen(true);
+  const openRegisterModal = () => {
+    setIsRegisterModalOpen(true);
   };
 
-  const closeLoginModal = () => {
-    setIsModalOpen(false);
+  const closeRegisterModal = () => {
+    setIsRegisterModalOpen(false);
   };
 
-  const handleLogin = () => {
-    closeLoginModal();
+  const handleRegister = () => {
+    closeRegisterModal();
+    setIsRegistered(true);
+    //onboarding
+    setIsOnboardingOpen(true);
   };
+
+  const handleOnboardingComplete = (responses) => {
+    console.log("Onboarding completado con respuestas:", responses);
+    setIsOnboardingOpen(false);
+    // Aquí guardarías las respuestas en el perfil del usuario
+    // Y redirigirías a la página principal
+    onNavigateHome("home");
+  };
+  const closeOnboarding = () => {
+    setIsOnboardingOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-150 to-red-200">
-      <LoginModal
-        isOpen={isModalOpen}
-        onClose={closeLoginModal}
-        onLogin={handleLogin}
+      <RegisterModal
+        isOpen={isRegisterModalOpen}
+        onClose={closeRegisterModal}
+        onRegister={handleRegister}
         onNavigateHome={onNavigateHome}
       />
+      <OnboardingModal
+        isOpen={isOnboardingOpen}
+        onComplete={handleOnboardingComplete}
+        onClose={closeOnboarding}
+      />
+
       {/* Header */}
       <header className="bg-gradient-to-bl from-red-200 to-red-250 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 max-h-25">
@@ -45,7 +69,7 @@ const LandingPage = ({ isLoggedIn, onLogout, onNavigateHome }) => {
                 Contacto
               </a>
               <div>
-                {isLoggedIn ? (
+                {isLoggedIn  ? (
                   <button
                     onClick={onLogout}
                     className="ml-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
@@ -54,10 +78,10 @@ const LandingPage = ({ isLoggedIn, onLogout, onNavigateHome }) => {
                   </button>
                 ) : (
                   <button
-                    onClick={openLoginingModal}
+                    onClick={openRegisterModal}
                     className="ml-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
-                    Iniciar sesión
+                    Unete!
                   </button>
                 )}
               </div>
@@ -107,11 +131,11 @@ const LandingPage = ({ isLoggedIn, onLogout, onNavigateHome }) => {
                   <img src={Ubi} alt="" srcset="" className="h-fit w-fit" />
                 </div>
                 <h3 className="mt-4 text-lg font-medium text-center text-gray-900">
-                  Rápido
+                  Geolocalización Inteligente
                 </h3>
                 <p className="mt-2 text-base text-gray-500">
-                  Nuestra aplicación está optimizada para ofrecerte la mejor
-                  velocidad y experiencia.
+                  Mapa interactivo en tiempo real que muestra centros de donación, campañas móviles y necesidades 
+                  específicas por ubicación, permitiendo encontrar el punto más cercano para donar.
                 </p>
               </div>
 
@@ -125,11 +149,11 @@ const LandingPage = ({ isLoggedIn, onLogout, onNavigateHome }) => {
                   />
                 </div>
                 <h3 className="mt-4 text-lg font-medium text-center text-gray-900">
-                  Seguro
+                  Alertas Personalizadas
                 </h3>
                 <p className="mt-2 text-base text-gray-500">
-                  Tus datos están protegidos con los más altos estándares de
-                  seguridad.
+                  Notificaciones automáticas basadas en tu perfil sanguíneo que te alertan cuando tu tipo 
+                  de sangre se requiere urgentemente en instituciones cercanas.
                 </p>
               </div>
 
@@ -138,11 +162,11 @@ const LandingPage = ({ isLoggedIn, onLogout, onNavigateHome }) => {
                   <img src={mapaUbi} alt="" srcset="" className="h-fit w-fit" />
                 </div>
                 <h3 className="mt-4 text-lg font-medium text-center text-gray-900">
-                  Colaborativo
+                  Aca iria otro beneficio
                 </h3>
                 <p className="mt-2 text-base text-gray-500">
-                  Trabaja en equipo y comparte tus proyectos con tus colegas
-                  fácilmente.
+                  puede ser las solicitude
+                  (cambiar ilustracion por una mas explicativa)
                 </p>
               </div>
             </div>
@@ -211,9 +235,9 @@ const LandingPage = ({ isLoggedIn, onLogout, onNavigateHome }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between">
             <div>
-              <h3 className="text-lg font-semibold">MiApp</h3>
+              <h3 className="text-lg font-semibold">HemoApp</h3>
               <p className="mt-2 text-gray-400">
-                © 2023 Todos los derechos reservados.
+                © YPF.
               </p>
             </div>
             <div>

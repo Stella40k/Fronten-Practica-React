@@ -1,4 +1,5 @@
 import Logo from "../assets/hemoapp_logo.png";
+import RequestPage from "./RequestPage"; 
 import { useState } from "react";
 import {
   MapContainer,
@@ -6,6 +7,7 @@ import {
   Marker,
   Popup,
   useMapEvents,
+  Circle
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import icon from "../assets/hospital.svg";
@@ -35,9 +37,21 @@ function LocationMarker() {
   });
 
   return position === null ? null : (
+    <>
+    <Circle
+        center={position}
+        pathOptions={{
+          color: 'red',
+          fillColor: '#f03',
+          fillOpacity: 0.2,
+          weight: 2
+        }}
+        radius={50} // 50 metros
+      />
     <Marker position={position}>
       <Popup>You are here</Popup>
     </Marker>
+  </>
   );
 }
 function HealthMarkers() {
@@ -77,7 +91,32 @@ function HealthMarkers() {
     </>
   );
 }
-const HomePage = ({ onLogout }) => {
+  const HomePage = ({ onLogout }) => {
+   const [currentView, setCurrentView] = useState("home"); // "home" o "request"
+
+    const handleNavigateToRequest  = () => {
+      setCurrentView("request");
+    };
+
+    const handleBackToHome  = () => {
+      setCurrentView("home");
+    };
+
+    const handleRequestSubmitted = () => {
+      setCurrentView("home");
+      // Aquí podrías mostrar una notificación de éxito
+      alert("Solicitud enviada exitosamente!");
+    };
+
+    if (currentView === "request") {
+    return (
+      <RequestPage 
+        onBack={handleBackToHome} 
+        onSubmit={handleRequestSubmitted}
+      />
+    );
+  }
+    
   return (
     <div className="min-h-screen bg-gray-50bg-gradient-to-br from-red-150 to-red-200">
       {/* Header */}
@@ -90,11 +129,14 @@ const HomePage = ({ onLogout }) => {
                 Inicio
               </a>
               <a href="#" className="text-gray-600 hover:text-red-600">
-                Proyectos
+                Retribucion
               </a>
-              <a href="#" className="text-gray-600 hover:text-red-600">
-                Configuración
-              </a>
+              <button
+                onClick={handleNavigateToRequest} // ✅ NUEVO EVENTO
+                className="text-gray-600 hover:text-red-600"
+              >
+               Solicitar 
+              </button>
             <div>
               <button
                 onClick={onLogout}
@@ -114,7 +156,7 @@ const HomePage = ({ onLogout }) => {
         <div className="mt-8">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Ubicación</h3>
           <p className="mt-2 text-gray-600">
-            Bienvenido de vuelta. Aquí tienes un mapa de los centros más
+            Bienvenido! Aquí tienes un mapa de los centros más
             cercanos.
           </p>
           <div className="bg-white p-4 rounded-lg shadow">
